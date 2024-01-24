@@ -16,13 +16,13 @@ class StudentManager:
         except FileNotFoundError:
             workbook = Workbook()
             sheet = workbook.active
-            sheet.append(["İsim", "Üniversite", "Mezun Olma Yılı", "Bölüm"])
+            sheet.append(["İsim", "Üniversite", "Mezun Olma Yılı", "Bölüm", "Telefon", "Mail", "Adres", "Çalıştığı Kurum"])
             workbook.save(self.filename)
         return workbook
 
-    def add_student(self, name, university, year, faculty):
+    def add_student(self, name, university, year, faculty, phone, email, address, workplace):
         sheet = self.workbook.active
-        sheet.append([name, university, year, faculty])
+        sheet.append([name, university, year, faculty, phone, email, address, workplace])
         self.workbook.save(self.filename)
 
     def search_student(self, search_name):
@@ -32,7 +32,8 @@ class StudentManager:
 
         for row in sheet.iter_rows(min_row=2, values_only=True):
             if row[0] == search_name:
-                result += f"İsim: {row[0]}, Kazandığı Üniversite: {row[1]}, Mezun Olma Yılı: {row[2]}, Kazandığı Bölüm: {row[3]}\n"
+                result += f"İsim: {row[0]}, Kazandığı Üniversite: {row[1]}, Mezun Olma Yılı: {row[2]}, Kazandığı Bölüm: {row[3]}, "
+                result += f"Telefon: {row[4]}, Mail: {row[5]}, Adres: {row[6]}, Çalıştığı Kurum: {row[7]}\n"
                 found = True
 
         if not found:
@@ -47,7 +48,8 @@ class StudentManager:
 
         for row in sheet.iter_rows(min_row=2, values_only=True):
             if row[0] == remove_name:
-                result += f"İsim: {row[0]}, Kazandığı Üniversite: {row[1]}, Mezun olma yılı: {row[2]}, Kazandığı bölüm: {row[3]}\n"
+                result += f"İsim: {row[0]}, Kazandığı Üniversite: {row[1]}, Mezun olma yılı: {row[2]}, Kazandığı bölüm: {row[3]}, "
+                result += f"Telefon: {row[4]}, Mail: {row[5]}, Adres: {row[6]}, Çalıştığı Kurum: {row[7]}\n"
                 found = True
 
         if not found:
@@ -117,34 +119,55 @@ class StudentManagementGUI:
     def add_student(self):
         self.clear_frame()
 
-        tk.Label(self.root, text="İsim:", font=("Helvetica", 12)).pack()  # Increase font size
+        tk.Label(self.root, text="İsim:", font=("Helvetica", 12)).pack()
         name_entry = tk.Entry(self.root)
         name_entry.pack()
 
-        tk.Label(self.root, text="Kazandığı üniversite:", font=("Helvetica", 12)).pack()  # Increase font size
+        tk.Label(self.root, text="Kazandığı üniversite:", font=("Helvetica", 12)).pack()
         university_entry = tk.Entry(self.root)
         university_entry.pack()
 
-        tk.Label(self.root, text="Mezun olma yılı:", font=("Helvetica", 12)).pack()  # Increase font size
+        tk.Label(self.root, text="Mezun olma yılı:", font=("Helvetica", 12)).pack()
         year_entry = tk.Entry(self.root)
         year_entry.pack()
 
-        tk.Label(self.root, text="Fakülte:", font=("Helvetica", 12)).pack()  # Increase font size
+        tk.Label(self.root, text="Fakülte:", font=("Helvetica", 12)).pack()
         faculty_entry = tk.Entry(self.root)
         faculty_entry.pack()
 
+        tk.Label(self.root, text="Telefon:", font=("Helvetica", 12)).pack()
+        phone_entry = tk.Entry(self.root)
+        phone_entry.pack()
+
+        tk.Label(self.root, text="Mail:", font=("Helvetica", 12)).pack()
+        email_entry = tk.Entry(self.root)
+        email_entry.pack()
+
+        tk.Label(self.root, text="Adres:", font=("Helvetica", 12)).pack()
+        address_entry = tk.Entry(self.root)
+        address_entry.pack()
+
+        tk.Label(self.root, text="Çalıştığı Kurum:", font=("Helvetica", 12)).pack()
+        workplace_entry = tk.Entry(self.root)
+        workplace_entry.pack()
+
         save_button = tk.Button(self.root, text="Kaydet",
                                 command=lambda: self.save_student(name_entry, university_entry, year_entry,
-                                                                  faculty_entry), font=("Helvetica", 12))  # Increase font size
+                                                                  faculty_entry, phone_entry, email_entry, address_entry, workplace_entry),
+                                font=("Helvetica", 12))
         save_button.pack()
 
-    def save_student(self, name_entry, university_entry, year_entry, faculty_entry):
+    def save_student(self, name_entry, university_entry, year_entry, faculty_entry, phone_entry, email_entry, address_entry, workplace_entry):
         name = name_entry.get()
         university = university_entry.get()
         year = year_entry.get()
         faculty = faculty_entry.get()
+        phone = phone_entry.get()
+        email = email_entry.get()
+        address = address_entry.get()
+        workplace = workplace_entry.get()
 
-        if not all([name, university, year, faculty]):
+        if not all([name, university, year, faculty, phone, email, address, workplace]):
             messagebox.showerror("Hata", "Tüm alanlar dolu olmalı.")
             return
 
@@ -154,7 +177,7 @@ class StudentManagementGUI:
             messagebox.showerror("Hata", "Mezun olma yılı bir sayı olmalıdır.")
             return
 
-        self.student_manager.add_student(name, university, year, faculty)
+        self.student_manager.add_student(name, university, year, faculty, phone, email, address, workplace)
         messagebox.showinfo("Başarılı", "Mezun başarıyla eklendi.")
 
         self.clear_frame()
@@ -163,11 +186,11 @@ class StudentManagementGUI:
     def search_student(self):
         self.clear_frame()
 
-        tk.Label(self.root, text="Mezun aramak için isim girin", font=("Helvetica", 12)).pack()  # Increase font size
+        tk.Label(self.root, text="Mezun aramak için isim girin", font=("Helvetica", 12)).pack()
         search_entry = tk.Entry(self.root)
         search_entry.pack()
 
-        search_button = tk.Button(self.root, text="Ara", command=lambda: self.display_search_result(search_entry), font=("Helvetica", 12))  # Increase font size
+        search_button = tk.Button(self.root, text="Ara", command=lambda: self.display_search_result(search_entry), font=("Helvetica", 12))
         search_button.pack()
 
     def display_search_result(self, search_entry):
@@ -181,11 +204,11 @@ class StudentManagementGUI:
     def remove_student(self):
         self.clear_frame()
 
-        tk.Label(self.root, text="Mezun kaldırmak için isim girin:", font=("Helvetica", 12)).pack()  # Increase font size
+        tk.Label(self.root, text="Mezun kaldırmak için isim girin:", font=("Helvetica", 12)).pack()
         remove_entry = tk.Entry(self.root)
         remove_entry.pack()
 
-        remove_button = tk.Button(self.root, text="Kaldır", command=lambda: self.confirm_remove(remove_entry), font=("Helvetica", 12))  # Increase font size
+        remove_button = tk.Button(self.root, text="Kaldır", command=lambda: self.confirm_remove(remove_entry), font=("Helvetica", 12))
         remove_button.pack()
 
     def confirm_remove(self, remove_entry):
