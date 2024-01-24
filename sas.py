@@ -1,8 +1,7 @@
 import tkinter as tk
 from tkinter import messagebox
 from PIL import Image, ImageTk
-import openpyxl
-from openpyxl import Workbook
+from openpyxl import Workbook, load_workbook
 import os
 
 class StudentManager:
@@ -12,7 +11,7 @@ class StudentManager:
 
     def create_workbook_if_not_exists(self):
         try:
-            workbook = openpyxl.load_workbook(self.filename)
+            workbook = load_workbook(self.filename)
         except FileNotFoundError:
             workbook = Workbook()
             sheet = workbook.active
@@ -65,6 +64,25 @@ class StudentManager:
                         messagebox.showinfo("Başarılı", "Mezun başarıyla kaldırıldı.")
                         break
 
+    def filter_by_year(self, filter_year):
+        sheet = self.workbook.active
+        filtered_students = []
+
+        for row in sheet.iter_rows(min_row=2, values_only=True):
+            if row[2] == filter_year:  # Assuming year is at index 2
+                filtered_students.append(row)
+
+        return filtered_students
+
+    def export_filtered_students(self, filtered_students, new_filename):
+        new_workbook = Workbook()
+        new_sheet = new_workbook.active
+        new_sheet.append(["İsim", "Üniversite", "Mezun Olma Yılı", "Bölüm", "Telefon", "Mail", "Adres", "Çalıştığı Kurum"])
+
+        for student in filtered_students:
+            new_sheet.append(student)
+
+        new_workbook.save(new_filename)
 
 class StudentManagementGUI:
     def __init__(self, root, student_manager, image_left_path, image_right_path):
@@ -77,19 +95,15 @@ class StudentManagementGUI:
     def initialize_gui(self):
         self.root.title("AMAL Mezun Yönetim Sistemi")
 
-        # Load images
         img_left = Image.open(self.image_left_path)
         img_right = Image.open(self.image_right_path)
 
-        # Resize images if needed
         img_left = img_left.resize((450, 300))
         img_right = img_right.resize((350, 350))
 
-        # Convert images to Tkinter PhotoImage objects
         img_left_tk = ImageTk.PhotoImage(img_left)
         img_right_tk = ImageTk.PhotoImage(img_right)
 
-        # Create labels for images and place them in the top left and top right corners
         label_left = tk.Label(self.root, image=img_left_tk)
         label_left.photo = img_left_tk
         label_left.pack(side=tk.LEFT, padx=5, pady=5)
@@ -113,12 +127,14 @@ class StudentManagementGUI:
         self.remove_button = tk.Button(self.root, text="Mezun Sil", command=self.remove_student, height=button_height, width=button_width, font=("Helvetica", 12))
         self.remove_button.pack()
 
+        self.filter_button = tk.Button(self.root, text="Yıla Göre Filtrele", command=self.filter_by_year, height=button_height, width=button_width, font=("Helvetica", 12))
+        self.filter_button.pack()
+
         self.exit_button = tk.Button(self.root, text="Çıkış", command=self.root.destroy, height=button_height, width=button_width, font=("Helvetica", 12))
         self.exit_button.pack()
 
     def add_student(self):
         self.clear_frame()
-
         tk.Label(self.root, text="İsim:", font=("Helvetica", 12)).pack()
         name_entry = tk.Entry(self.root)
         name_entry.pack()
@@ -153,7 +169,8 @@ class StudentManagementGUI:
 
         save_button = tk.Button(self.root, text="Kaydet",
                                 command=lambda: self.save_student(name_entry, university_entry, year_entry,
-                                                                  faculty_entry, phone_entry, email_entry, address_entry, workplace_entry),
+                                                                  faculty_entry, phone_entry, email_entry,
+                                                                  address_entry, workplace_entry),
                                 font=("Helvetica", 12))
         save_button.pack()
 
@@ -223,19 +240,53 @@ class StudentManagementGUI:
         for widget in self.root.winfo_children():
             widget.destroy()
 
+    def filter_by_year(self):
+        self.clear_frame()
+        tk.Label(self.root, text="Filtreleme Yılı:", font=("Helvetica", 12)).pack()
+        filter_year_entry = tk.Entry(self.root)
+        filter_year_entry.pack()
+
+        filter_button = tk.Button(self.root, text="Filtrele", command=lambda: self.apply_year_filter(filter_year_entry),
+                                  font=("Helvetica", 12))
+        filter_button.pack()
+
+    def apply_year_filter(self, filter_year_entry):
+        filter_year = filter_year_entry.get()
+
+        if not filter_year.isdigit():
+            messagebox.showerror("Hata", "Filtreleme yılı bir sayı olmalıdır.")
+            return
+
+        filtered_students = self.student_manager.filter_by_year(int(filter_year))
+
+        if not filtered_students:
+            messagebox.showinfo("Bilgi", f"{filter_year} yılına ait kayıt bulunamadı.")
+            return
+
+        new_filename = f"{filter_year}_filtered.xlsx"
+        self.student_manager.export_filtered_students(filtered_students, new_filename)
+
+        messagebox.showinfo("Başarılı", f"{filter_year} yılına ait kayıtlar {new_filename} dosyasına kaydedildi.")
+
+        self.clear_frame()
+        self.initialize_gui()
+
+    def clear_frame(self):
+        for widget in self.root.winfo_children():
+            widget.destroy()
+
+
 def main():
     root = tk.Tk()
 
-    # Get the script's directory
     script_dir = os.path.dirname(os.path.abspath(__file__))
-
-    # Construct image paths relative to the script's directory
     image_left_path = os.path.join(script_dir, "hawks.png")
     image_right_path = os.path.join(script_dir, "amal.png")
 
     student_manager = StudentManager()
     app = StudentManagementGUI(root, student_manager, image_left_path, image_right_path)
     root.mainloop()
+
 
 if __name__ == "__main__":
     main()
