@@ -1,8 +1,10 @@
-max = 500
+#credits to ali sahin
+import tkinter as tk
+from tkinter import messagebox
 
+max_entries = 500
 
-# Structure of Employee
-class employee:
+class Employee:
     def __init__(self):
         self.name = ''
         self.code = 0
@@ -10,133 +12,121 @@ class employee:
         self.exp = 0
         self.age = 0
 
-
 num = 0
-emp = [employee() for i in range(max)]
-tempemp = [employee() for i in range(max)]
-sortemp = [employee() for i in range(max)]
-sortemp1 = [employee() for i in range(max)]
+employees = [Employee() for _ in range(max_entries)]
 
-
-# Function to build the given datatype
-def build():
-    global num, emp
-
-    print("Birden çok kişi gir")
-    print("Maksimum: ", max)
-
-    num = int(input("Giriş Sayısı: "))
-
-    if num > max:
-        print("Giriş sayısı en fazla 500 olabilir")
-        num = 500
-
-    print("Aşağıdaki bilgileri girin")
-    for i in range(num):
-        emp[i].name = input("İsim-Soyisim: ")
-        emp[i].code = int(input("TC No.: "))
-        emp[i].designation = input("Designation: ")
-        emp[i].exp = int(input("Experience: "))
-        emp[i].age = int(input("Yaş: "))
-
-    showMenu()
-
-
-# Function to insert the data into
-# given data type
 def insert():
-    global num, emp
+    global num, employees
 
-    if num < max:
+    if num < max_entries:
         i = num
         num += 1
 
-        print("Öğrenci bilgilerini gir")
-        emp[i].name = input("İsim-Soyisim: ")
-        emp[i].code = int(input("TC No.: "))
-        emp[i].designation = input("Designation: ")
-        emp[i].exp = int(input("Experience: "))
-        emp[i].age = int(input("Yaş: "))
+        employees[i].name = entry_name.get()
+        employees[i].code = int(entry_code.get())
+        employees[i].designation = entry_designation.get()
+        employees[i].exp = int(entry_exp.get())
+        employees[i].age = int(entry_age.get())
     else:
-        print("Maksimum öğrenci sayısına ulaşıldı")
+        messagebox.showerror("Hata", "Maksimum öğrenci sayısına ulaşıldı")
 
-    showMenu()
+    show_menu()
 
-
-# Function to delete record at index i
-def deleteIndex(i):
-    global num, emp
+def delete_index(i):
+    global num, employees
 
     for j in range(i, num - 1):
-        emp[j].name = emp[j + 1].name
-        emp[j].code = emp[j + 1].code
-        emp[j].designation = emp[j + 1].designation
-        emp[j].exp = emp[j + 1].exp
-        emp[j].age = emp[j + 1].age
+        employees[j].name = employees[j + 1].name
+        employees[j].code = employees[j + 1].code
+        employees[j].designation = employees[j + 1].designation
+        employees[j].exp = employees[j + 1].exp
+        employees[j].age = employees[j + 1].age
 
+def delete_record():
+    global num, employees
 
-# Function to delete record
-def deleteRecord():
-    global num, emp
-
-    code = int(input("Öğrenci silmek için TC No. girin "))
+    code = int(entry_code.get())
 
     for i in range(num):
-        if emp[i].code == code:
-            deleteIndex(i)
+        if employees[i].code == code:
+            delete_index(i)
             num -= 1
             break
 
-    showMenu()
+    show_menu()
 
+def search_record():
+    global num, employees
 
-def searchRecord():
-    global num, emp
-
-    code = int(input("Öğrenci sorgulamak için TC No. girin "))
+    search_name = entry_name.get().lower()  # Küçük harfe çevirerek arama yapıyoruz
 
     for i in range(num):
-        # If the data is found
-        if emp[i].code == code:
-            print("Ad-Soyad", emp[i].name)
-            print("TC No.: ", emp[i].code)
-            print("Designation:", emp[i].designation)
-            print("Experience:", emp[i].exp)
-            print("Yaş", emp[i].age)
+        # İsimle eşleşme kontrolü
+        if employees[i].name.lower() == search_name:
+            result_label.config(text=f"Ad-Soyad: {employees[i].name}\nTC No.: {employees[i].code}\nTanım: {employees[i].designation}\nDeneyim: {employees[i].exp}\nYaş: {employees[i].age}")
             break
-
-    showMenu()
-
-
-# Function to show menu
-def showMenu():
-    print("-------------------------Mezunlar Platformu-------------------------\n")
-    print("Seçenekler:\n")
-    print("Birden çok kişi gir (1)")
-    print("Yeni kişi gir (2)")
-    print("Öğrenci sil	 (3)")
-    print("Öğrenci ara	 (4)")
-    print("Çıkış			 (5)")
-
-    # Input Options
-    option = int(input())
-
-    # Call
-    if option == 1:
-        build()
-    elif option == 2:
-        insert()
-    elif option == 3:
-        deleteRecord()
-    elif option == 4:
-        searchRecord()
-    elif option == 5:
-        return
     else:
-        print("Expected Options")
-        print("are 1/2/3/4/5")
-        showMenu()
+        result_label.config(text="Kayıt bulunamadı")
 
+def show_menu():
+    entry_name.delete(0, tk.END)
+    entry_code.delete(0, tk.END)
+    entry_designation.delete(0, tk.END)
+    entry_exp.delete(0, tk.END)
+    entry_age.delete(0, tk.END)
 
-# Driver code
-showMenu()
+    result_label.config(text="")
+    
+    frame_menu.pack()
+
+# GUI
+root = tk.Tk()
+root.title("Mezunlar Platformu")
+
+frame_menu = tk.Frame(root)
+
+label_name = tk.Label(frame_menu, text="İsim-Soyisim:")
+label_name.grid(row=0, column=0, padx=10, pady=10)
+
+entry_name = tk.Entry(frame_menu)
+entry_name.grid(row=0, column=1, padx=10, pady=10)
+
+label_code = tk.Label(frame_menu, text="TC No.:")
+label_code.grid(row=1, column=0, padx=10, pady=10)
+
+entry_code = tk.Entry(frame_menu)
+entry_code.grid(row=1, column=1, padx=10, pady=10)
+
+label_designation = tk.Label(frame_menu, text="Tanım:")
+label_designation.grid(row=2, column=0, padx=10, pady=10)
+
+entry_designation = tk.Entry(frame_menu)
+entry_designation.grid(row=2, column=1, padx=10, pady=10)
+
+label_exp = tk.Label(frame_menu, text="Deneyim:")
+label_exp.grid(row=3, column=0, padx=10, pady=10)
+
+entry_exp = tk.Entry(frame_menu)
+entry_exp.grid(row=3, column=1, padx=10, pady=10)
+
+label_age = tk.Label(frame_menu, text="Yaş:")
+label_age.grid(row=4, column=0, padx=10, pady=10)
+
+entry_age = tk.Entry(frame_menu)
+entry_age.grid(row=4, column=1, padx=10, pady=10)
+
+btn_insert = tk.Button(frame_menu, text="Yeni kişi gir", command=insert)
+btn_insert.grid(row=5, column=0, columnspan=2, pady=10)
+
+btn_delete = tk.Button(frame_menu, text="Öğrenci sil", command=delete_record)
+btn_delete.grid(row=6, column=0, columnspan=2, pady=10)
+
+btn_search = tk.Button(frame_menu, text="Öğrenci ara", command=search_record)
+btn_search.grid(row=7, column=0, columnspan=2, pady=10)
+
+result_label = tk.Label(frame_menu, text="")
+result_label.grid(row=8, column=0, columnspan=2, pady=10)
+
+show_menu()
+
+root.mainloop()
