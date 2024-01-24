@@ -1,142 +1,161 @@
-max = 500
+import tkinter as tk
+from tkinter import messagebox
+import openpyxl
+from openpyxl import Workbook
+from openpyxl.utils import get_column_letter
 
+class StudentManagementGUI:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("Student Management System")
 
-# Structure of Employee
-class employee:
-    def __init__(self):
-        self.name = ''
-        self.code = 0
-        self.designation = ''
-        self.exp = 0
-        self.age = 0
+        self.create_workbook_if_not_exists()
 
+        self.label = tk.Label(root, text="Options:")
+        self.label.pack()
 
-num = 0
-emp = [employee() for i in range(max)]
-tempemp = [employee() for i in range(max)]
-sortemp = [employee() for i in range(max)]
-sortemp1 = [employee() for i in range(max)]
+        self.add_button = tk.Button(root, text="Add Student", command=self.add_student)
+        self.add_button.pack()
 
+        self.search_button = tk.Button(root, text="Search Student", command=self.search_student)
+        self.search_button.pack()
 
-# Function to build the given datatype
-def build():
-    global num, emp
+        self.remove_button = tk.Button(root, text="Remove Student", command=self.remove_student)
+        self.remove_button.pack()
 
-    print("Birden çok kişi gir")
-    print("Maksimum: ", max)
+        self.exit_button = tk.Button(root, text="Exit", command=root.destroy)
+        self.exit_button.pack()
 
-    num = int(input("Giriş Sayısı: "))
+    def create_workbook_if_not_exists(self):
+        try:
+            workbook = openpyxl.load_workbook('students.xlsx')
+        except FileNotFoundError:
+            workbook = Workbook()
+            sheet = workbook.active
+            sheet.append(["Name", "University", "Year", "Faculty"])
+            workbook.save('students.xlsx')
 
-    if num > max:
-        print("Giriş sayısı en fazla 500 olabilir")
-        num = 500
+    def add_student(self):
+        add_window = tk.Toplevel(self.root)
+        add_window.title("Add Student")
 
-    print("Aşağıdaki bilgileri girin")
-    for i in range(num):
-        emp[i].name = input("İsim-Soyisim: ")
-        emp[i].code = int(input("TC No.: "))
-        emp[i].designation = input("Designation: ")
-        emp[i].exp = int(input("Experience: "))
-        emp[i].age = int(input("Yaş: "))
+        name_label = tk.Label(add_window, text="Name:")
+        name_label.grid(row=0, column=0)
+        self.name_entry = tk.Entry(add_window)
+        self.name_entry.grid(row=0, column=1)
 
-    showMenu()
+        university_label = tk.Label(add_window, text="University:")
+        university_label.grid(row=1, column=0)
+        self.university_entry = tk.Entry(add_window)
+        self.university_entry.grid(row=1, column=1)
 
+        year_label = tk.Label(add_window, text="Year of Graduation:")
+        year_label.grid(row=2, column=0)
+        self.year_entry = tk.Entry(add_window)
+        self.year_entry.grid(row=2, column=1)
 
-# Function to insert the data into
-# given data type
-def insert():
-    global num, emp
+        faculty_label = tk.Label(add_window, text="Faculty:")
+        faculty_label.grid(row=3, column=0)
+        self.faculty_entry = tk.Entry(add_window)
+        self.faculty_entry.grid(row=3, column=1)
 
-    if num < max:
-        i = num
-        num += 1
+        save_button = tk.Button(add_window, text="Save", command=self.save_student)
+        save_button.grid(row=4, columnspan=2)
 
-        print("Öğrenci bilgilerini gir")
-        emp[i].name = input("İsim-Soyisim: ")
-        emp[i].code = int(input("TC No.: "))
-        emp[i].designation = input("Designation: ")
-        emp[i].exp = int(input("Experience: "))
-        emp[i].age = int(input("Yaş: "))
-    else:
-        print("Maksimum öğrenci sayısına ulaşıldı")
+    def save_student(self):
+        name = self.name_entry.get()
+        university = self.university_entry.get()
+        year = self.year_entry.get()
+        faculty = self.faculty_entry.get()
 
-    showMenu()
+        workbook = openpyxl.load_workbook('students.xlsx')
+        sheet = workbook.active
+        sheet.append([name, university, year, faculty])
+        workbook.save('students.xlsx')
+        messagebox.showinfo("Success", "Student added successfully.")
+        self.name_entry.delete(0, tk.END)
+        self.university_entry.delete(0, tk.END)
+        self.year_entry.delete(0, tk.END)
+        self.faculty_entry.delete(0, tk.END)
 
+    def search_student(self):
+        search_window = tk.Toplevel(self.root)
+        search_window.title("Search Student")
 
-# Function to delete record at index i
-def deleteIndex(i):
-    global num, emp
+        search_label = tk.Label(search_window, text="Enter the name to search:")
+        search_label.pack()
 
-    for j in range(i, num - 1):
-        emp[j].name = emp[j + 1].name
-        emp[j].code = emp[j + 1].code
-        emp[j].designation = emp[j + 1].designation
-        emp[j].exp = emp[j + 1].exp
-        emp[j].age = emp[j + 1].age
+        self.search_entry = tk.Entry(search_window)
+        self.search_entry.pack()
 
+        search_button = tk.Button(search_window, text="Search", command=self.display_search_result)
+        search_button.pack()
 
-# Function to delete record
-def deleteRecord():
-    global num, emp
+    def display_search_result(self):
+        search_name = self.search_entry.get()
 
-    code = int(input("Öğrenci silmek için TC No. girin "))
+        workbook = openpyxl.load_workbook('students.xlsx')
+        sheet = workbook.active
 
-    for i in range(num):
-        if emp[i].code == code:
-            deleteIndex(i)
-            num -= 1
-            break
+        found = False
+        result = ""
 
-    showMenu()
+        for row in sheet.iter_rows(min_row=2, values_only=True):
+            if row[0] == search_name:
+                result += f"Name: {row[0]}, University: {row[1]}, Year: {row[2]}, Faculty: {row[3]}\n"
+                found = True
 
+        if not found:
+            result = "Student not found."
 
-def searchRecord():
-    global num, emp
+        messagebox.showinfo("Search Result", result)
 
-    code = int(input("Öğrenci sorgulamak için TC No. girin "))
+    def remove_student(self):
+        remove_window = tk.Toplevel(self.root)
+        remove_window.title("Remove Student")
 
-    for i in range(num):
-        # If the data is found
-        if emp[i].code == code:
-            print("Ad-Soyad", emp[i].name)
-            print("TC No.: ", emp[i].code)
-            print("Designation:", emp[i].designation)
-            print("Experience:", emp[i].exp)
-            print("Yaş", emp[i].age)
-            break
+        remove_label = tk.Label(remove_window, text="Enter the name to remove:")
+        remove_label.pack()
 
-    showMenu()
+        self.remove_entry = tk.Entry(remove_window)
+        self.remove_entry.pack()
 
+        remove_button = tk.Button(remove_window, text="Remove", command=self.confirm_remove)
+        remove_button.pack()
 
-# Function to show menu
-def showMenu():
-    print("-------------------------Mezunlar Platformu-------------------------\n")
-    print("Seçenekler:\n")
-    print("Birden çok kişi gir (1)")
-    print("Yeni kişi gir (2)")
-    print("Öğrenci sil	 (3)")
-    print("Öğrenci ara	 (4)")
-    print("Çıkış			 (5)")
+    def confirm_remove(self):
+        remove_name = self.remove_entry.get()
 
-    # Input Options
-    option = int(input())
+        workbook = openpyxl.load_workbook('students.xlsx')
+        sheet = workbook.active
 
-    # Call
-    if option == 1:
-        build()
-    elif option == 2:
-        insert()
-    elif option == 3:
-        deleteRecord()
-    elif option == 4:
-        searchRecord()
-    elif option == 5:
-        return
-    else:
-        print("Expected Options")
-        print("are 1/2/3/4/5")
-        showMenu()
+        found = False
+        result = ""
 
+        for row in sheet.iter_rows(min_row=2, values_only=True):
+            if row[0] == remove_name:
+                result += f"Name: {row[0]}, University: {row[1]}, Year: {row[2]}, Faculty: {row[3]}\n"
+                found = True
 
-# Driver code
-showMenu()
+        if not found:
+            result = "Student not found."
+        else:
+            confirm = messagebox.askyesno("Confirmation", f"Are you sure you want to delete this student?\n{result}")
+
+            if confirm:
+                for row in sheet.iter_rows(min_row=2, values_only=True):
+                    if row[0] == remove_name:
+                        sheet.delete_rows(row[0].row)
+                        workbook.save('students.xlsx')
+                        messagebox.showinfo("Success", "Student removed successfully.")
+                        break
+
+        self.remove_entry.delete(0, tk.END)
+
+def main():
+    root = tk.Tk()
+    app = StudentManagementGUI(root)
+    root.mainloop()
+
+if __name__ == "__main__":
+    main()
