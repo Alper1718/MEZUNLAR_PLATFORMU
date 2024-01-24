@@ -86,29 +86,36 @@ class StudentManagementGUI:
         self.exit_button.pack()
 
     def add_student(self):
-        add_window = tk.Toplevel(self.root)
-        add_window.title("Add Student")
+        self.clear_frame()
+        
+        tk.Label(self.root, text="Name:").pack()
+        name_entry = tk.Entry(self.root)
+        name_entry.pack()
 
-        labels = ["Name", "University", "Year of Graduation", "Faculty"]
-        entries = []
+        tk.Label(self.root, text="University:").pack()
+        university_entry = tk.Entry(self.root)
+        university_entry.pack()
 
-        for i, label in enumerate(labels):
-            tk.Label(add_window, text=label + ":").grid(row=i, column=0)
-            entry = tk.Entry(add_window)
-            entry.grid(row=i, column=1)
-            entries.append(entry)
+        tk.Label(self.root, text="Year of Graduation:").pack()
+        year_entry = tk.Entry(self.root)
+        year_entry.pack()
 
-        save_button = tk.Button(add_window, text="Save", command=lambda: self.save_student(entries))
-        save_button.grid(row=len(labels), columnspan=2)
+        tk.Label(self.root, text="Faculty:").pack()
+        faculty_entry = tk.Entry(self.root)
+        faculty_entry.pack()
 
-    def save_student(self, entries):
-        values = [entry.get() for entry in entries]
+        save_button = tk.Button(self.root, text="Save", command=lambda: self.save_student(name_entry, university_entry, year_entry, faculty_entry))
+        save_button.pack()
 
-        if not all(values):
+    def save_student(self, name_entry, university_entry, year_entry, faculty_entry):
+        name = name_entry.get()
+        university = university_entry.get()
+        year = year_entry.get()
+        faculty = faculty_entry.get()
+
+        if not all([name, university, year, faculty]):
             messagebox.showerror("Error", "All fields must be filled.")
             return
-
-        name, university, year, faculty = values
 
         try:
             year = int(year)
@@ -119,44 +126,48 @@ class StudentManagementGUI:
         self.student_manager.add_student(name, university, year, faculty)
         messagebox.showinfo("Success", "Student added successfully.")
 
-        for entry in entries:
-            entry.delete(0, tk.END)
+        self.clear_frame()
+        self.initialize_gui()
 
     def search_student(self):
-        search_window = tk.Toplevel(self.root)
-        search_window.title("Search Student")
+        self.clear_frame()
 
-        search_label = tk.Label(search_window, text="Enter the name to search:")
-        search_label.pack()
+        tk.Label(self.root, text="Enter the name to search:").pack()
+        search_entry = tk.Entry(self.root)
+        search_entry.pack()
 
-        self.search_entry = tk.Entry(search_window)
-        self.search_entry.pack()
-
-        search_button = tk.Button(search_window, text="Search", command=self.display_search_result)
+        search_button = tk.Button(self.root, text="Search", command=lambda: self.display_search_result(search_entry))
         search_button.pack()
 
-    def display_search_result(self):
-        search_name = self.search_entry.get()
+    def display_search_result(self, search_entry):
+        search_name = search_entry.get()
         result = self.student_manager.search_student(search_name)
         messagebox.showinfo("Search Result", result)
 
+        self.clear_frame()
+        self.initialize_gui()
+
     def remove_student(self):
-        remove_window = tk.Toplevel(self.root)
-        remove_window.title("Remove Student")
+        self.clear_frame()
 
-        remove_label = tk.Label(remove_window, text="Enter the name to remove:")
-        remove_label.pack()
+        tk.Label(self.root, text="Enter the name to remove:").pack()
+        remove_entry = tk.Entry(self.root)
+        remove_entry.pack()
 
-        self.remove_entry = tk.Entry(remove_window)
-        self.remove_entry.pack()
-
-        remove_button = tk.Button(remove_window, text="Remove", command=self.confirm_remove)
+        remove_button = tk.Button(self.root, text="Remove", command=lambda: self.confirm_remove(remove_entry))
         remove_button.pack()
 
-    def confirm_remove(self):
-        remove_name = self.remove_entry.get()
+    def confirm_remove(self, remove_entry):
+        remove_name = remove_entry.get()
         self.student_manager.remove_student(remove_name)
-        self.remove_entry.delete(0, tk.END)
+        remove_entry.delete(0, tk.END)
+
+        self.clear_frame()
+        self.initialize_gui()
+
+    def clear_frame(self):
+        for widget in self.root.winfo_children():
+            widget.destroy()
 
 def main():
     root = tk.Tk()
