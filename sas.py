@@ -4,6 +4,7 @@ from PIL import Image, ImageTk
 from openpyxl import Workbook, load_workbook
 import os
 
+
 class StudentManager:
     def __init__(self, filename='mezunlar.xlsx'):
         self.filename = filename
@@ -106,11 +107,11 @@ class StudentManagementGUI:
 
         label_left = tk.Label(self.root, image=img_left_tk)
         label_left.photo = img_left_tk
-        label_left.pack(side=tk.LEFT, padx=5, pady=5)
+        label_left.place(x=30,y=685)
 
         label_right = tk.Label(self.root, image=img_right_tk)
         label_right.photo = img_right_tk
-        label_right.pack(side=tk.RIGHT, padx=5, pady=5)
+        label_right.place(x=1550, y=650)
 
         self.label = tk.Label(self.root, text="Seçenekler:", font=("Helvetica", 16))
         self.label.pack()
@@ -236,10 +237,6 @@ class StudentManagementGUI:
         self.clear_frame()
         self.initialize_gui()
 
-    def clear_frame(self):
-        for widget in self.root.winfo_children():
-            widget.destroy()
-
     def filter_by_year(self):
         self.clear_frame()
         tk.Label(self.root, text="Filtreleme Yılı:", font=("Helvetica", 12)).pack()
@@ -288,5 +285,5 @@ def main():
     root.mainloop()
 
 
-if __name__ == "__main__":
+if __name__ == "__main___":
     main()
