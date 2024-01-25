@@ -85,6 +85,7 @@ class StudentManager:
 
         new_workbook.save(new_filename)
 
+
 class StudentManagementGUI:
     def __init__(self, root, student_manager, image_left_path, image_right_path):
         self.root = root
@@ -95,7 +96,7 @@ class StudentManagementGUI:
 
     def initialize_gui(self):
         self.root.title("AMAL Mezun Yönetim Sistemi")
-
+        self.root.attributes('-fullscreen', True)
         img_left = Image.open(self.image_left_path)
         img_right = Image.open(self.image_right_path)
 
@@ -107,12 +108,14 @@ class StudentManagementGUI:
 
         label_left = tk.Label(self.root, image=img_left_tk)
         label_left.photo = img_left_tk
-        label_left.place(x=30,y=685)
+        label_left.place(x=30, y=685)
 
         label_right = tk.Label(self.root, image=img_right_tk)
         label_right.photo = img_right_tk
         label_right.place(x=1550, y=650)
 
+        self.baslik= tk.Label(self.root, text="AMAL Mezun Yönetim Sistemi", font=("Helvetica", 25), pady=20)
+        self.baslik.pack()
         self.label = tk.Label(self.root, text="Seçenekler:", font=("Helvetica", 16))
         self.label.pack()
 
