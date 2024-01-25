@@ -95,6 +95,8 @@ class StudentManagementGUI:
         self.initialize_gui()
 
     def initialize_gui(self):
+        self.clear_frame()
+
         self.root.title("AMAL Mezun Yönetim Sistemi")
         self.root.attributes('-fullscreen', True)
         img_left = Image.open(self.image_left_path)
@@ -178,6 +180,10 @@ class StudentManagementGUI:
                                 font=("Helvetica", 12), height=2, width=20)
         save_button.pack()
 
+        cancel_button = tk.Button(self.root, text="İptal", command=self.initialize_gui, font=("Helvetica", 12),
+                                  height=2, width=20)
+        cancel_button.pack()
+
         img_left = Image.open(self.image_left_path)
         img_right = Image.open(self.image_right_path)
 
@@ -231,6 +237,10 @@ class StudentManagementGUI:
         search_button = tk.Button(self.root, text="Ara", command=lambda: self.display_search_result(search_entry), font=("Helvetica", 12), height=2, width=20)
         search_button.pack()
 
+        cancel_button = tk.Button(self.root, text="İptal", command=self.initialize_gui, font=("Helvetica", 12),
+                                  height=2, width=20)
+        cancel_button.pack()
+
         img_left = Image.open(self.image_left_path)
         img_right = Image.open(self.image_right_path)
 
@@ -266,6 +276,10 @@ class StudentManagementGUI:
         remove_button = tk.Button(self.root, text="Kaldır", command=lambda: self.confirm_remove(remove_entry), font=("Helvetica", 12), height=2, width=20)
         remove_button.pack()
 
+        cancel_button = tk.Button(self.root, text="İptal", command=self.initialize_gui, font=("Helvetica", 12),
+                                  height=2, width=20)
+        cancel_button.pack()
+
         img_left = Image.open(self.image_left_path)
         img_right = Image.open(self.image_right_path)
 
@@ -300,6 +314,10 @@ class StudentManagementGUI:
         filter_button = tk.Button(self.root, text="Filtrele", command=lambda: self.apply_year_filter(filter_year_entry),
                                   font=("Helvetica", 12), height=2, width=20)
         filter_button.pack()
+
+        cancel_button = tk.Button(self.root, text="İptal", command=self.initialize_gui, font=("Helvetica", 12),
+                                  height=2, width=20)
+        cancel_button.pack()
 
         img_left = Image.open(self.image_left_path)
         img_right = Image.open(self.image_right_path)
