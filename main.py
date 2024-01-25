@@ -114,7 +114,7 @@ class StudentManagementGUI:
         label_right.photo = img_right_tk
         label_right.place(x=1550, y=650)
 
-        self.baslik= tk.Label(self.root, text="AMAL Mezun Yönetim Sistemi", font=("Helvetica", 25), pady=20)
+        self.baslik = tk.Label(self.root, text="AMAL Mezun Yönetim Sistemi", font=("Helvetica", 25), pady=20)
         self.baslik.pack()
         self.label = tk.Label(self.root, text="Seçenekler:", font=("Helvetica", 16))
         self.label.pack()
@@ -139,35 +139,35 @@ class StudentManagementGUI:
 
     def add_student(self):
         self.clear_frame()
-        tk.Label(self.root, text="İsim:", font=("Helvetica", 12)).pack()
+        tk.Label(self.root, text="İsim:", font=("Helvetica", 14)).pack()
         name_entry = tk.Entry(self.root)
         name_entry.pack()
 
-        tk.Label(self.root, text="Kazandığı üniversite:", font=("Helvetica", 12)).pack()
+        tk.Label(self.root, text="Kazandığı üniversite:", font=("Helvetica", 14)).pack()
         university_entry = tk.Entry(self.root)
         university_entry.pack()
 
-        tk.Label(self.root, text="Mezun olma yılı:", font=("Helvetica", 12)).pack()
+        tk.Label(self.root, text="Mezun olma yılı:", font=("Helvetica", 14)).pack()
         year_entry = tk.Entry(self.root)
         year_entry.pack()
 
-        tk.Label(self.root, text="Fakülte:", font=("Helvetica", 12)).pack()
+        tk.Label(self.root, text="Fakülte:", font=("Helvetica", 14)).pack()
         faculty_entry = tk.Entry(self.root)
         faculty_entry.pack()
 
-        tk.Label(self.root, text="Telefon:", font=("Helvetica", 12)).pack()
+        tk.Label(self.root, text="Telefon:", font=("Helvetica", 14)).pack()
         phone_entry = tk.Entry(self.root)
         phone_entry.pack()
 
-        tk.Label(self.root, text="Mail:", font=("Helvetica", 12)).pack()
+        tk.Label(self.root, text="Mail:", font=("Helvetica", 14)).pack()
         email_entry = tk.Entry(self.root)
         email_entry.pack()
 
-        tk.Label(self.root, text="Adres:", font=("Helvetica", 12)).pack()
+        tk.Label(self.root, text="Adres:", font=("Helvetica", 14)).pack()
         address_entry = tk.Entry(self.root)
         address_entry.pack()
 
-        tk.Label(self.root, text="Çalıştığı Kurum:", font=("Helvetica", 12)).pack()
+        tk.Label(self.root, text="Çalıştığı Kurum:", font=("Helvetica", 14)).pack()
         workplace_entry = tk.Entry(self.root)
         workplace_entry.pack()
 
@@ -175,7 +175,7 @@ class StudentManagementGUI:
                                 command=lambda: self.save_student(name_entry, university_entry, year_entry,
                                                                   faculty_entry, phone_entry, email_entry,
                                                                   address_entry, workplace_entry),
-                                font=("Helvetica", 12))
+                                font=("Helvetica", 12), height=2, width=20)
         save_button.pack()
 
         img_left = Image.open(self.image_left_path)
@@ -224,11 +224,11 @@ class StudentManagementGUI:
     def search_student(self):
         self.clear_frame()
 
-        tk.Label(self.root, text="Mezun aramak için isim girin", font=("Helvetica", 12)).pack()
+        tk.Label(self.root, text="Mezun aramak için isim girin", font=("Helvetica", 16), pady=20).pack()
         search_entry = tk.Entry(self.root)
         search_entry.pack()
 
-        search_button = tk.Button(self.root, text="Ara", command=lambda: self.display_search_result(search_entry), font=("Helvetica", 12))
+        search_button = tk.Button(self.root, text="Ara", command=lambda: self.display_search_result(search_entry), font=("Helvetica", 12), height=2, width=20)
         search_button.pack()
 
         img_left = Image.open(self.image_left_path)
@@ -259,11 +259,11 @@ class StudentManagementGUI:
     def remove_student(self):
         self.clear_frame()
 
-        tk.Label(self.root, text="Mezun kaldırmak için isim girin:", font=("Helvetica", 12)).pack()
+        tk.Label(self.root, text="Mezun kaldırmak için isim girin:", font=("Helvetica", 14)).pack()
         remove_entry = tk.Entry(self.root)
         remove_entry.pack()
 
-        remove_button = tk.Button(self.root, text="Kaldır", command=lambda: self.confirm_remove(remove_entry), font=("Helvetica", 12))
+        remove_button = tk.Button(self.root, text="Kaldır", command=lambda: self.confirm_remove(remove_entry), font=("Helvetica", 12), height=2, width=20)
         remove_button.pack()
 
         img_left = Image.open(self.image_left_path)
@@ -293,12 +293,12 @@ class StudentManagementGUI:
 
     def filter_by_year(self):
         self.clear_frame()
-        tk.Label(self.root, text="Filtreleme Yılı:", font=("Helvetica", 12)).pack()
+        tk.Label(self.root, text="Filtreleme Yılı:", font=("Helvetica", 14), pady=20).pack()
         filter_year_entry = tk.Entry(self.root)
         filter_year_entry.pack()
 
         filter_button = tk.Button(self.root, text="Filtrele", command=lambda: self.apply_year_filter(filter_year_entry),
-                                  font=("Helvetica", 12))
+                                  font=("Helvetica", 12), height=2, width=20)
         filter_button.pack()
 
         img_left = Image.open(self.image_left_path)
@@ -322,7 +322,7 @@ class StudentManagementGUI:
         filter_year = filter_year_entry.get()
 
         if not filter_year.isdigit():
-            messagebox.showerror("Hata", "Filtreleme yılı bir sayı olmalıdır.")
+            messagebox.showerror('Hata', "Filtreleme yılı bir sayı olmalıdır.")
             return
 
         filtered_students = self.student_manager.filter_by_year(int(filter_year))
