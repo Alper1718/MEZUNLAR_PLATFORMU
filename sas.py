@@ -175,6 +175,23 @@ class StudentManagementGUI:
                                 font=("Helvetica", 12))
         save_button.pack()
 
+        img_left = Image.open(self.image_left_path)
+        img_right = Image.open(self.image_right_path)
+
+        img_left = img_left.resize((450, 300))
+        img_right = img_right.resize((350, 350))
+
+        img_left_tk = ImageTk.PhotoImage(img_left)
+        img_right_tk = ImageTk.PhotoImage(img_right)
+
+        label_left = tk.Label(self.root, image=img_left_tk)
+        label_left.photo = img_left_tk
+        label_left.place(x=30, y=685)
+
+        label_right = tk.Label(self.root, image=img_right_tk)
+        label_right.photo = img_right_tk
+        label_right.place(x=1550, y=650)
+
     def save_student(self, name_entry, university_entry, year_entry, faculty_entry, phone_entry, email_entry, address_entry, workplace_entry):
         name = name_entry.get()
         university = university_entry.get()
@@ -211,6 +228,23 @@ class StudentManagementGUI:
         search_button = tk.Button(self.root, text="Ara", command=lambda: self.display_search_result(search_entry), font=("Helvetica", 12))
         search_button.pack()
 
+        img_left = Image.open(self.image_left_path)
+        img_right = Image.open(self.image_right_path)
+
+        img_left = img_left.resize((450, 300))
+        img_right = img_right.resize((350, 350))
+
+        img_left_tk = ImageTk.PhotoImage(img_left)
+        img_right_tk = ImageTk.PhotoImage(img_right)
+
+        label_left = tk.Label(self.root, image=img_left_tk)
+        label_left.photo = img_left_tk
+        label_left.place(x=30, y=685)
+
+        label_right = tk.Label(self.root, image=img_right_tk)
+        label_right.photo = img_right_tk
+        label_right.place(x=1550, y=650)
+
     def display_search_result(self, search_entry):
         search_name = search_entry.get()
         result = self.student_manager.search_student(search_name)
@@ -229,6 +263,23 @@ class StudentManagementGUI:
         remove_button = tk.Button(self.root, text="Kaldır", command=lambda: self.confirm_remove(remove_entry), font=("Helvetica", 12))
         remove_button.pack()
 
+        img_left = Image.open(self.image_left_path)
+        img_right = Image.open(self.image_right_path)
+
+        img_left = img_left.resize((450, 300))
+        img_right = img_right.resize((350, 350))
+
+        img_left_tk = ImageTk.PhotoImage(img_left)
+        img_right_tk = ImageTk.PhotoImage(img_right)
+
+        label_left = tk.Label(self.root, image=img_left_tk)
+        label_left.photo = img_left_tk
+        label_left.place(x=30, y=685)
+
+        label_right = tk.Label(self.root, image=img_right_tk)
+        label_right.photo = img_right_tk
+        label_right.place(x=1550, y=650)
+
     def confirm_remove(self, remove_entry):
         remove_name = remove_entry.get()
         self.student_manager.remove_student(remove_name)
@@ -246,6 +297,23 @@ class StudentManagementGUI:
         filter_button = tk.Button(self.root, text="Filtrele", command=lambda: self.apply_year_filter(filter_year_entry),
                                   font=("Helvetica", 12))
         filter_button.pack()
+
+        img_left = Image.open(self.image_left_path)
+        img_right = Image.open(self.image_right_path)
+
+        img_left = img_left.resize((450, 300))
+        img_right = img_right.resize((350, 350))
+
+        img_left_tk = ImageTk.PhotoImage(img_left)
+        img_right_tk = ImageTk.PhotoImage(img_right)
+
+        label_left = tk.Label(self.root, image=img_left_tk)
+        label_left.photo = img_left_tk
+        label_left.place(x=30, y=685)
+
+        label_right = tk.Label(self.root, image=img_right_tk)
+        label_right.photo = img_right_tk
+        label_right.place(x=1550, y=650)
 
     def apply_year_filter(self, filter_year_entry):
         filter_year = filter_year_entry.get()
