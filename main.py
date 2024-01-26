@@ -16,7 +16,8 @@ class StudentManager:
         except FileNotFoundError:
             workbook = Workbook()
             sheet = workbook.active
-            sheet.append(["İsim", "Üniversite", "Mezun Olma Yılı", "Bölüm", "Telefon", "Mail", "Adres", "Çalıştığı Kurum"])
+            sheet.append(["İsim", "Üniversite", "Mezun Olma Yılı", "Bölüm", "Telefon", "Mail", "Adres", "Çalıştığı "
+                                                                                                        "Kurum"])
             workbook.save(self.filename)
         return workbook
 
@@ -32,7 +33,7 @@ class StudentManager:
 
         for row in sheet.iter_rows(min_row=2, values_only=True):
             if row[0] == search_name:
-                result += f"İsim: {row[0]}, Kazandığı Üniversite: {row[1]}, Mezun Olma Yılı: {row[2]}, Kazandığı Bölüm: {row[3]}, "
+                result += f"İsim: {row[0]}, Kazandığı Üniversite: {row[1]}, Mezun Olma Yılı: {row[2]}, Kazandığı Bölüm: {row[3]},"
                 result += f"Telefon: {row[4]}, Mail: {row[5]}, Adres: {row[6]}, Çalıştığı Kurum: {row[7]}\n"
                 found = True
 
@@ -97,7 +98,7 @@ class StudentManagementGUI:
     def initialize_gui(self):
         self.clear_frame()
 
-        self.root.title("AMAL Mezun Yönetim Sistemi")
+        self.root.title("Adnan Menderes Anadolu Lisesi Mezun Yönetim Sistemi")
         self.root.attributes('-fullscreen', True)
         img_left = Image.open(self.image_left_path)
         img_right = Image.open(self.image_right_path)
@@ -116,7 +117,7 @@ class StudentManagementGUI:
         label_right.photo = img_right_tk
         label_right.place(x=1550, y=650)
 
-        self.baslik = tk.Label(self.root, text="AMAL Mezun Yönetim Sistemi", font=("Helvetica", 25), pady=20)
+        self.baslik = tk.Label(self.root, text="Adnan Menderes Anadolu Lisesi Mezun Yönetim Sistemi", font=("Helvetica", 25), pady=20)
         self.baslik.pack()
         self.label = tk.Label(self.root, text="Seçenekler:", font=("Helvetica", 16))
         self.label.pack()
