@@ -103,19 +103,19 @@ class StudentManagementGUI:
         img_left = Image.open(self.image_left_path)
         img_right = Image.open(self.image_right_path)
 
-        img_left = img_left.resize((450, 300))
-        img_right = img_right.resize((350, 350))
+        img_left = img_left.resize((330, 300))
+        img_right = img_right.resize((325, 325))
 
         img_left_tk = ImageTk.PhotoImage(img_left)
         img_right_tk = ImageTk.PhotoImage(img_right)
 
         label_left = tk.Label(self.root, image=img_left_tk)
         label_left.photo = img_left_tk
-        label_left.place(x=30, y=685)
+        label_left.pack(side="left", anchor="s")
 
         label_right = tk.Label(self.root, image=img_right_tk)
         label_right.photo = img_right_tk
-        label_right.place(x=1550, y=650)
+        label_right.pack(side="right", anchor="s")
 
         self.baslik = tk.Label(self.root, text="Adnan Menderes Anadolu Lisesi Mezun Yönetim Sistemi", font=("Helvetica", 25), pady=20)
         self.baslik.pack()
