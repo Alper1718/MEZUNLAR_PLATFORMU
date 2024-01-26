@@ -173,6 +173,8 @@ class StudentManagementGUI:
         workplace_entry = tk.Entry(self.root)
         workplace_entry.pack()
 
+        tk.Label(self.root, text="").pack()
+
         save_button = tk.Button(self.root, text="Kaydet",
                                 command=lambda: self.save_student(name_entry, university_entry, year_entry,
                                                                   faculty_entry, phone_entry, email_entry,
@@ -234,6 +236,8 @@ class StudentManagementGUI:
         search_entry = tk.Entry(self.root)
         search_entry.pack()
 
+        tk.Label(self.root, text="").pack()
+
         search_button = tk.Button(self.root, text="Ara", command=lambda: self.display_search_result(search_entry), font=("Helvetica", 12), height=2, width=20)
         search_button.pack()
 
@@ -273,6 +277,8 @@ class StudentManagementGUI:
         remove_entry = tk.Entry(self.root)
         remove_entry.pack()
 
+        tk.Label(self.root, text="").pack()
+
         remove_button = tk.Button(self.root, text="Kaldır", command=lambda: self.confirm_remove(remove_entry), font=("Helvetica", 12), height=2, width=20)
         remove_button.pack()
 
@@ -310,6 +316,8 @@ class StudentManagementGUI:
         tk.Label(self.root, text="Filtreleme Yılı:", font=("Helvetica", 14), pady=20).pack()
         filter_year_entry = tk.Entry(self.root)
         filter_year_entry.pack()
+
+        tk.Label(self.root, text="").pack()
 
         filter_button = tk.Button(self.root, text="Filtrele", command=lambda: self.apply_year_filter(filter_year_entry),
                                   font=("Helvetica", 12), height=2, width=20)
