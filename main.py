@@ -134,7 +134,7 @@ class StudentManagementGUI:
         self.remove_button = tk.Button(self.root, text="Mezun Sil", command=self.remove_student, height=button_height, width=button_width, font=("Helvetica", 12))
         self.remove_button.pack()
 
-        self.filter_button = tk.Button(self.root, text="Yıla Göre Filtrele", command=self.filter_by_year, height=button_height, width=button_width, font=("Helvetica", 12))
+        self.filter_button = tk.Button(self.root, text="Filtrele ve Dosya Oluştur", command=self.filter_by_year, height=button_height, width=button_width, font=("Helvetica", 12))
         self.filter_button.pack()
 
         self.exit_button = tk.Button(self.root, text="Çıkış", command=self.root.destroy, height=button_height, width=button_width, font=("Helvetica", 12))
@@ -314,54 +314,89 @@ class StudentManagementGUI:
 
     def filter_by_year(self):
         self.clear_frame()
-        tk.Label(self.root, text="Filtreleme Yılı:", font=("Helvetica", 14), pady=20).pack()
-        filter_year_entry = tk.Entry(self.root)
-        filter_year_entry.pack()
+
+        self.filter_label = tk.Label(self.root, text="Filtreleme Türünü Seçin:", font=("Helvetica", 16), pady=20)
+        self.filter_label.pack()
+
+        button_height = 2
+        button_width = 20
+
+        filter_year_button = tk.Button(self.root, text="Yıla Göre Filtrele", command=lambda: self.prompt_filter("year"),
+                                       height=button_height, width=button_width, font=("Helvetica", 12))
+        filter_year_button.pack()
+
+        filter_university_button = tk.Button(self.root, text="Üniversiteye Göre Filtrele",
+                                             command=lambda: self.prompt_filter("university"), height=button_height,
+                                             width=button_width, font=("Helvetica", 12))
+        filter_university_button.pack()
+
+        filter_faculty_button = tk.Button(self.root, text="Fakülteye Göre Filtrele",
+                                          command=lambda: self.prompt_filter("faculty"), height=button_height,
+                                          width=button_width, font=("Helvetica", 12))
+        filter_faculty_button.pack()
+
+        self.exit_button = tk.Button(self.root, text="Çıkış", command=self.root.destroy, height=button_height,
+                                     width=button_width, font=("Helvetica", 12))
+        self.exit_button.pack()
+
+    def prompt_filter(self, filter_type):
+        self.clear_frame()
+
+        filter_label_text = ""
+
+        if filter_type == "year":
+            filter_label_text = "Filtrelemelek istediğiniz yılı girin"
+        elif filter_type == "university":
+            filter_label_text = "Filtrelemelek istediğiniz üniversiteyi girin"
+        elif filter_type == "faculty":
+            filter_label_text = "Filtrelemelek istediğiniz fakülteyi girin"
+
+        tk.Label(self.root, text=filter_label_text, font=("Helvetica", 14)).pack()
+        filter_entry = tk.Entry(self.root)
+        filter_entry.pack()
 
         tk.Label(self.root, text="").pack()
 
-        filter_button = tk.Button(self.root, text="Filtrele", command=lambda: self.apply_year_filter(filter_year_entry),
-                                  font=("Helvetica", 12), height=2, width=20)
+        filter_button = tk.Button(self.root, text="Filtrele",
+                                  command=lambda: self.apply_filter(filter_type, filter_entry), font=("Helvetica", 12),
+                                  height=2, width=20)
         filter_button.pack()
 
         cancel_button = tk.Button(self.root, text="İptal", command=self.initialize_gui, font=("Helvetica", 12),
                                   height=2, width=20)
         cancel_button.pack()
 
-        img_left = Image.open(self.image_left_path)
-        img_right = Image.open(self.image_right_path)
+    def apply_filter(self, filter_type, filter_entry):
+        filter_value = filter_entry.get()
 
-        img_left = img_left.resize((450, 300))
-        img_right = img_right.resize((350, 350))
-
-        img_left_tk = ImageTk.PhotoImage(img_left)
-        img_right_tk = ImageTk.PhotoImage(img_right)
-
-        label_left = tk.Label(self.root, image=img_left_tk)
-        label_left.photo = img_left_tk
-        label_left.place(x=30, y=685)
-
-        label_right = tk.Label(self.root, image=img_right_tk)
-        label_right.photo = img_right_tk
-        label_right.place(x=1550, y=650)
-
-    def apply_year_filter(self, filter_year_entry):
-        filter_year = filter_year_entry.get()
-
-        if not filter_year.isdigit():
-            messagebox.showerror('Hata', "Filtreleme yılı bir sayı olmalıdır.")
+        if not filter_value:
+            messagebox.showerror('Hata', "Filtre değeri boş olamaz.")
             return
 
-        filtered_students = self.student_manager.filter_by_year(int(filter_year))
+        filtered_students = []
+
+        if filter_type == "year":
+            if not filter_value.isdigit():
+                messagebox.showerror('Hata', "Filtreleme yılı bir sayı olmalıdır.")
+                return
+            filtered_students = self.student_manager.filter_by_year(int(filter_value))
+        elif filter_type == "university":
+            filtered_students = [row for row in
+                                 self.student_manager.workbook.active.iter_rows(min_row=2, values_only=True) if
+                                 row[1] == filter_value]
+        elif filter_type == "faculty":
+            filtered_students = [row for row in
+                                 self.student_manager.workbook.active.iter_rows(min_row=2, values_only=True) if
+                                 row[3] == filter_value]
 
         if not filtered_students:
-            messagebox.showinfo("Bilgi", f"{filter_year} yılına ait kayıt bulunamadı.")
+            messagebox.showinfo("Bilgi", f"Belirtilen filtre değerine ait kayıt bulunamadı.")
             return
 
-        new_filename = f"{filter_year}_filtered.xlsx"
+        new_filename = f"{filter_type}_filtered.xlsx"
         self.student_manager.export_filtered_students(filtered_students, new_filename)
 
-        messagebox.showinfo("Başarılı", f"{filter_year} yılına ait kayıtlar {new_filename} dosyasına kaydedildi.")
+        messagebox.showinfo("Başarılı", f"Belirtilen filtre değerine ait kayıtlar {new_filename} dosyasına kaydedildi.")
 
         self.clear_frame()
         self.initialize_gui()
