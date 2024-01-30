@@ -321,17 +321,17 @@ class StudentManagementGUI:
         button_height = 2
         button_width = 20
 
-        filter_year_button = tk.Button(self.root, text="Yıla Göre Filtrele", command=lambda: self.prompt_filter("year"),
+        filter_year_button = tk.Button(self.root, text="Yıla Göre Filtrele", command=lambda: self.prompt_filter("yıl"),
                                        height=button_height, width=button_width, font=("Helvetica", 12))
         filter_year_button.pack()
 
         filter_university_button = tk.Button(self.root, text="Üniversiteye Göre Filtrele",
-                                             command=lambda: self.prompt_filter("university"), height=button_height,
+                                             command=lambda: self.prompt_filter("universite"), height=button_height,
                                              width=button_width, font=("Helvetica", 12))
         filter_university_button.pack()
 
         filter_faculty_button = tk.Button(self.root, text="Fakülteye Göre Filtrele",
-                                          command=lambda: self.prompt_filter("faculty"), height=button_height,
+                                          command=lambda: self.prompt_filter("fakulte"), height=button_height,
                                           width=button_width, font=("Helvetica", 12))
         filter_faculty_button.pack()
 
@@ -344,11 +344,11 @@ class StudentManagementGUI:
 
         filter_label_text = ""
 
-        if filter_type == "year":
+        if filter_type == "yıl":
             filter_label_text = "Filtrelemelek istediğiniz yılı girin"
-        elif filter_type == "university":
+        elif filter_type == "universite":
             filter_label_text = "Filtrelemelek istediğiniz üniversiteyi girin"
-        elif filter_type == "faculty":
+        elif filter_type == "fakulte":
             filter_label_text = "Filtrelemelek istediğiniz fakülteyi girin"
 
         tk.Label(self.root, text=filter_label_text, font=("Helvetica", 14)).pack()
@@ -375,16 +375,16 @@ class StudentManagementGUI:
 
         filtered_students = []
 
-        if filter_type == "year":
+        if filter_type == "yıl":
             if not filter_value.isdigit():
                 messagebox.showerror('Hata', "Filtreleme yılı bir sayı olmalıdır.")
                 return
             filtered_students = self.student_manager.filter_by_year(int(filter_value))
-        elif filter_type == "university":
+        elif filter_type == "universite":
             filtered_students = [row for row in
                                  self.student_manager.workbook.active.iter_rows(min_row=2, values_only=True) if
                                  row[1] == filter_value]
-        elif filter_type == "faculty":
+        elif filter_type == "fakulte":
             filtered_students = [row for row in
                                  self.student_manager.workbook.active.iter_rows(min_row=2, values_only=True) if
                                  row[3] == filter_value]
@@ -393,7 +393,7 @@ class StudentManagementGUI:
             messagebox.showinfo("Bilgi", f"Belirtilen filtre değerine ait kayıt bulunamadı.")
             return
 
-        new_filename = f"{filter_type}_filtered.xlsx"
+        new_filename = f"{filter_value}_filtrelenmis.xlsx"
         self.student_manager.export_filtered_students(filtered_students, new_filename)
 
         messagebox.showinfo("Başarılı", f"Belirtilen filtre değerine ait kayıtlar {new_filename} dosyasına kaydedildi.")
