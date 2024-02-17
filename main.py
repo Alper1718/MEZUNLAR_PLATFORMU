@@ -33,7 +33,7 @@ class StudentManager:
 
         for row in sheet.iter_rows(min_row=2, values_only=True):
             if row[0] == search_name:
-                result += f"İsim: {row[0]}, Kazandığı Üniversite: {row[1]}, Mezun Olma Yılı: {row[2]}, Kazandığı Bölüm: {row[3]},"
+                result += f"İsim: {row[0]}, Kazandığı Üniversite: {row[1]}, Mezun Olma Yılı: {row[2]}, Kazandığı Bölüm: {row[3]}, "
                 result += f"Telefon: {row[4]}, Mail: {row[5]}, Adres: {row[6]}, Çalıştığı Kurum: {row[7]}\n"
                 found = True
 
@@ -93,28 +93,27 @@ class StudentManagementGUI:
         self.student_manager = student_manager
         self.image_left_path = image_left_path
         self.image_right_path = image_right_path
+        self.img_left = None
+        self.img_right = None
         self.initialize_gui()
+
+    def load_images(self):
+        img_left = Image.open(self.image_left_path)
+        img_right = Image.open(self.image_right_path)
+        self.img_left = ImageTk.PhotoImage(img_left.resize((330, 300)))
+        self.img_right = ImageTk.PhotoImage(img_right.resize((325, 325)))
 
     def initialize_gui(self):
         self.clear_frame()
 
         self.root.title("Adnan Menderes Anadolu Lisesi Mezun Yönetim Sistemi")
         self.root.attributes('-fullscreen', True)
-        img_left = Image.open(self.image_left_path)
-        img_right = Image.open(self.image_right_path)
+        self.load_images()
 
-        img_left = img_left.resize((330, 300))
-        img_right = img_right.resize((325, 325))
-
-        img_left_tk = ImageTk.PhotoImage(img_left)
-        img_right_tk = ImageTk.PhotoImage(img_right)
-
-        label_left = tk.Label(self.root, image=img_left_tk)
-        label_left.photo = img_left_tk
+        label_left = tk.Label(self.root, image=self.img_left)
         label_left.pack(side="left", anchor="s")
 
-        label_right = tk.Label(self.root, image=img_right_tk)
-        label_right.photo = img_right_tk
+        label_right = tk.Label(self.root, image=self.img_right)
         label_right.pack(side="right", anchor="s")
 
         self.baslik = tk.Label(self.root, text="Adnan Menderes Anadolu Lisesi Mezun Yönetim Sistemi", font=("Helvetica", 25), pady=20)
