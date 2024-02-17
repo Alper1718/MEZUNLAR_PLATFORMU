@@ -190,19 +190,19 @@ class StudentManagementGUI:
         img_left = Image.open(self.image_left_path)
         img_right = Image.open(self.image_right_path)
 
-        img_left = img_left.resize((450, 300))
-        img_right = img_right.resize((350, 350))
+        img_left = img_left.resize((330, 300))
+        img_right = img_right.resize((325, 325))
 
         img_left_tk = ImageTk.PhotoImage(img_left)
         img_right_tk = ImageTk.PhotoImage(img_right)
 
         label_left = tk.Label(self.root, image=img_left_tk)
         label_left.photo = img_left_tk
-        label_left.place(x=30, y=685)
+        label_left.pack(side="left", anchor="s")
 
         label_right = tk.Label(self.root, image=img_right_tk)
         label_right.photo = img_right_tk
-        label_right.place(x=1550, y=650)
+        label_right.pack(side="right", anchor="s")
 
     def save_student(self, name_entry, university_entry, year_entry, faculty_entry, phone_entry, email_entry, address_entry, workplace_entry):
         name = name_entry.get()
@@ -249,19 +249,19 @@ class StudentManagementGUI:
         img_left = Image.open(self.image_left_path)
         img_right = Image.open(self.image_right_path)
 
-        img_left = img_left.resize((450, 300))
-        img_right = img_right.resize((350, 350))
+        img_left = img_left.resize((330, 300))
+        img_right = img_right.resize((325, 325))
 
         img_left_tk = ImageTk.PhotoImage(img_left)
         img_right_tk = ImageTk.PhotoImage(img_right)
 
         label_left = tk.Label(self.root, image=img_left_tk)
         label_left.photo = img_left_tk
-        label_left.place(x=30, y=685)
+        label_left.pack(side="left", anchor="s")
 
         label_right = tk.Label(self.root, image=img_right_tk)
         label_right.photo = img_right_tk
-        label_right.place(x=1550, y=650)
+        label_right.pack(side="right", anchor="s")
 
     def display_search_result(self, search_entry):
         search_name = search_entry.get()
@@ -290,19 +290,19 @@ class StudentManagementGUI:
         img_left = Image.open(self.image_left_path)
         img_right = Image.open(self.image_right_path)
 
-        img_left = img_left.resize((450, 300))
-        img_right = img_right.resize((350, 350))
+        img_left = img_left.resize((330, 300))
+        img_right = img_right.resize((325, 325))
 
         img_left_tk = ImageTk.PhotoImage(img_left)
         img_right_tk = ImageTk.PhotoImage(img_right)
 
         label_left = tk.Label(self.root, image=img_left_tk)
         label_left.photo = img_left_tk
-        label_left.place(x=30, y=685)
+        label_left.pack(side="left", anchor="s")
 
         label_right = tk.Label(self.root, image=img_right_tk)
         label_right.photo = img_right_tk
-        label_right.place(x=1550, y=650)
+        label_right.pack(side="right", anchor="s")
 
     def confirm_remove(self, remove_entry):
         remove_name = remove_entry.get()
@@ -339,6 +339,23 @@ class StudentManagementGUI:
                                      width=button_width, font=("Helvetica", 12))
         self.exit_button.pack()
 
+        img_left = Image.open(self.image_left_path)
+        img_right = Image.open(self.image_right_path)
+
+        img_left = img_left.resize((330, 300))
+        img_right = img_right.resize((325, 325))
+
+        img_left_tk = ImageTk.PhotoImage(img_left)
+        img_right_tk = ImageTk.PhotoImage(img_right)
+
+        label_left = tk.Label(self.root, image=img_left_tk)
+        label_left.photo = img_left_tk
+        label_left.pack(side="left", anchor="s")
+
+        label_right = tk.Label(self.root, image=img_right_tk)
+        label_right.photo = img_right_tk
+        label_right.pack(side="right", anchor="s")
+
     def prompt_filter(self, filter_type):
         self.clear_frame()
 
@@ -365,6 +382,23 @@ class StudentManagementGUI:
         cancel_button = tk.Button(self.root, text="İptal", command=self.initialize_gui, font=("Helvetica", 12),
                                   height=2, width=20)
         cancel_button.pack()
+
+        img_left = Image.open(self.image_left_path)
+        img_right = Image.open(self.image_right_path)
+
+        img_left = img_left.resize((330, 300))
+        img_right = img_right.resize((325, 325))
+
+        img_left_tk = ImageTk.PhotoImage(img_left)
+        img_right_tk = ImageTk.PhotoImage(img_right)
+
+        label_left = tk.Label(self.root, image=img_left_tk)
+        label_left.photo = img_left_tk
+        label_left.pack(side="left", anchor="s")
+
+        label_right = tk.Label(self.root, image=img_right_tk)
+        label_right.photo = img_right_tk
+        label_right.pack(side="right", anchor="s")
 
     def apply_filter(self, filter_type, filter_entry):
         filter_value = filter_entry.get()
