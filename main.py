@@ -121,14 +121,14 @@ class StudentManagementGUI:
         self.label.pack()
 
         button_height = 50
-        button_width = 200
+        button_width = 250
 
         # Load icons
-        icon_add = Image.open("singleplayer.png").resize((30, 30))
-        icon_search = Image.open("zoom.png").resize((30, 30))
-        icon_remove = Image.open("remove.png").resize((30, 30))
-        icon_filter = Image.open("export.png").resize((30, 30))
-        icon_exit = Image.open("exit.png").resize((30, 30))
+        icon_add = Image.open("singleplayer.png").resize((40, 40))
+        icon_search = Image.open("zoom.png").resize((40, 40))
+        icon_remove = Image.open("remove.png").resize((40, 40))
+        icon_filter = Image.open("export.png").resize((40, 40))
+        icon_exit = Image.open("exit.png").resize((40, 40))
 
         self.icon_add = ImageTk.PhotoImage(icon_add)
         self.icon_search = ImageTk.PhotoImage(icon_search)
@@ -167,6 +167,10 @@ class StudentManagementGUI:
         self.exit_button.pack(anchor="center")
 
     def add_student(self):
+
+        button_height = 50
+        button_width = 250
+
         self.clear_frame()
         tk.Label(self.root, text="İsim:", font=("Helvetica", 14)).pack()
         name_entry = tk.Entry(self.root)
@@ -202,15 +206,25 @@ class StudentManagementGUI:
 
         tk.Label(self.root, text="").pack()
 
-        save_button = tk.Button(self.root, text="Kaydet",
+        save_button = tk.Button(self.root, text="Kaydet        ",
                                 command=lambda: self.save_student(name_entry, university_entry, year_entry,
                                                                   faculty_entry, phone_entry, email_entry,
                                                                   address_entry, workplace_entry),
-                                font=("Helvetica", 12), height=2, width=20)
+                                font=("Helvetica", 12), height=button_height, width=button_width)
+
+        # Load the image for the save button
+        icon_add = Image.open("singleplayer.png").resize((40, 40))
+        self.icon_add = ImageTk.PhotoImage(icon_add)
+        save_button.config(image=self.icon_add, compound=tk.LEFT)  # Configure the button's image
         save_button.pack()
 
-        cancel_button = tk.Button(self.root, text="İptal", command=self.initialize_gui, font=("Helvetica", 12),
-                                  height=2, width=20)
+        cancel_button = tk.Button(self.root, text="İptal        ", command=self.initialize_gui, font=("Helvetica", 12),
+                                  height=button_height, width=button_width)
+
+        # Load the image for the cancel button
+        icon_cancel = Image.open("cross.png").resize((40, 40))
+        self.icon_cancel = ImageTk.PhotoImage(icon_cancel)
+        cancel_button.config(image=self.icon_cancel, compound=tk.LEFT)  # Configure the button's image
         cancel_button.pack()
 
         img_left = Image.open(self.image_left_path)
@@ -259,17 +273,31 @@ class StudentManagementGUI:
     def search_student(self):
         self.clear_frame()
 
+        button_height = 50
+        button_width = 250
+
         tk.Label(self.root, text="Mezun aramak için isim girin", font=("Helvetica", 16), pady=20).pack()
         search_entry = tk.Entry(self.root)
         search_entry.pack()
 
         tk.Label(self.root, text="").pack()
 
-        search_button = tk.Button(self.root, text="Ara", command=lambda: self.display_search_result(search_entry), font=("Helvetica", 12), height=2, width=20)
+        search_button = tk.Button(self.root, text="Ara        ", command=lambda: self.display_search_result(search_entry),
+                                  font=("Helvetica", 12), height=button_height, width=button_width)
+
+        # Load the image for the search button
+        icon_search = Image.open("zoom.png").resize((40, 40))
+        self.icon_search = ImageTk.PhotoImage(icon_search)
+        search_button.config(image=self.icon_search, compound=tk.LEFT)  # Configure the button's image
         search_button.pack()
 
-        cancel_button = tk.Button(self.root, text="İptal", command=self.initialize_gui, font=("Helvetica", 12),
-                                  height=2, width=20)
+        cancel_button = tk.Button(self.root, text="İptal        ", command=self.initialize_gui, font=("Helvetica", 12),
+                                  height=button_height, width=button_width)
+
+        # Load the image for the cancel button
+        icon_cancel = Image.open("cross.png").resize((40, 40))
+        self.icon_cancel = ImageTk.PhotoImage(icon_cancel)
+        cancel_button.config(image=self.icon_cancel, compound=tk.LEFT)  # Configure the button's image
         cancel_button.pack()
 
         img_left = Image.open(self.image_left_path)
@@ -300,17 +328,31 @@ class StudentManagementGUI:
     def remove_student(self):
         self.clear_frame()
 
+        button_height = 50
+        button_width = 250
+
         tk.Label(self.root, text="Mezun kaldırmak için isim girin:", font=("Helvetica", 14)).pack()
         remove_entry = tk.Entry(self.root)
         remove_entry.pack()
 
         tk.Label(self.root, text="").pack()
 
-        remove_button = tk.Button(self.root, text="Kaldır", command=lambda: self.confirm_remove(remove_entry), font=("Helvetica", 12), height=2, width=20)
+        remove_button = tk.Button(self.root, text="Kaldır      ", command=lambda: self.confirm_remove(remove_entry),
+                                  font=("Helvetica", 12), height=button_height, width=button_width)
+
+        # Load the image for the remove button
+        icon_remove = Image.open("trashcan.png").resize((40, 40))
+        self.icon_remove = ImageTk.PhotoImage(icon_remove)
+        remove_button.config(image=self.icon_remove, compound=tk.LEFT)  # Configure the button's image
         remove_button.pack()
 
-        cancel_button = tk.Button(self.root, text="İptal", command=self.initialize_gui, font=("Helvetica", 12),
-                                  height=2, width=20)
+        cancel_button = tk.Button(self.root, text="İptal      ", command=self.initialize_gui, font=("Helvetica", 12),
+                                  height=button_height, width=button_width)
+
+        # Load the image for the cancel button
+        icon_cancel = Image.open("cross.png").resize((40, 40))
+        self.icon_cancel = ImageTk.PhotoImage(icon_cancel)
+        cancel_button.config(image=self.icon_cancel, compound=tk.LEFT)  # Configure the button's image
         cancel_button.pack()
 
         img_left = Image.open(self.image_left_path)
@@ -344,26 +386,42 @@ class StudentManagementGUI:
         self.filter_label = tk.Label(self.root, text="Filtreleme Türünü Seçin:", font=("Helvetica", 16), pady=20)
         self.filter_label.pack()
 
-        button_height = 2
-        button_width = 20
+        button_height = 50
+        button_width = 250
+
+        # Load images for each button
+        icon_filter_year = Image.open("button1.png").resize((40, 40))
+        icon_filter_university = Image.open("button2.png").resize((40, 40))
+        icon_filter_faculty = Image.open("button3.png").resize((40, 40))
+        icon_exit = Image.open("cross.png").resize((40, 40))
+
+        self.icon_filter_year = ImageTk.PhotoImage(icon_filter_year)
+        self.icon_filter_university = ImageTk.PhotoImage(icon_filter_university)
+        self.icon_filter_faculty = ImageTk.PhotoImage(icon_filter_faculty)
+        self.icon_exit = ImageTk.PhotoImage(icon_exit)
 
         filter_year_button = tk.Button(self.root, text="Yıla Göre Filtrele", command=lambda: self.prompt_filter("yıl"),
                                        height=button_height, width=button_width, font=("Helvetica", 12))
+        filter_year_button.config(image=self.icon_filter_year, compound=tk.LEFT)  # Configure the button's image
         filter_year_button.pack()
 
         filter_university_button = tk.Button(self.root, text="Üniversiteye Göre Filtrele",
                                              command=lambda: self.prompt_filter("universite"), height=button_height,
                                              width=button_width, font=("Helvetica", 12))
+        filter_university_button.config(image=self.icon_filter_university,
+                                        compound=tk.LEFT)  # Configure the button's image
         filter_university_button.pack()
 
         filter_faculty_button = tk.Button(self.root, text="Fakülteye Göre Filtrele",
                                           command=lambda: self.prompt_filter("fakulte"), height=button_height,
                                           width=button_width, font=("Helvetica", 12))
+        filter_faculty_button.config(image=self.icon_filter_faculty, compound=tk.LEFT)  # Configure the button's image
         filter_faculty_button.pack()
 
-        self.exit_button = tk.Button(self.root, text="Çıkış", command=self.root.destroy, height=button_height,
-                                     width=button_width, font=("Helvetica", 12))
-        self.exit_button.pack()
+        exit_button = tk.Button(self.root, text="İptal", command=self.initialize_gui, height=button_height,
+                                width=button_width, font=("Helvetica", 12))
+        exit_button.config(image=self.icon_exit, compound=tk.LEFT)  # Configure the button's image
+        exit_button.pack()
 
         img_left = Image.open(self.image_left_path)
         img_right = Image.open(self.image_right_path)
@@ -385,6 +443,9 @@ class StudentManagementGUI:
     def prompt_filter(self, filter_type):
         self.clear_frame()
 
+        button_height = 50
+        button_width = 250
+
         filter_label_text = ""
 
         if filter_type == "yıl":
@@ -400,13 +461,22 @@ class StudentManagementGUI:
 
         tk.Label(self.root, text="").pack()
 
+        # Load images for the buttons
+        icon_filter = Image.open("filter-removebg-preview.png").resize((40, 40))
+        icon_cancel = Image.open("cross.png").resize((40, 40))
+
+        self.icon_filter = ImageTk.PhotoImage(icon_filter)
+        self.icon_cancel = ImageTk.PhotoImage(icon_cancel)
+
         filter_button = tk.Button(self.root, text="Filtrele",
                                   command=lambda: self.apply_filter(filter_type, filter_entry), font=("Helvetica", 12),
-                                  height=2, width=20)
+                                  height=button_height, width=button_width)
+        filter_button.config(image=self.icon_filter, compound=tk.LEFT)  # Configure the button's image
         filter_button.pack()
 
         cancel_button = tk.Button(self.root, text="İptal", command=self.initialize_gui, font=("Helvetica", 12),
-                                  height=2, width=20)
+                                  height=button_height, width=button_width)
+        cancel_button.config(image=self.icon_cancel, compound=tk.LEFT)  # Configure the button's image
         cancel_button.pack()
 
         img_left = Image.open(self.image_left_path)
