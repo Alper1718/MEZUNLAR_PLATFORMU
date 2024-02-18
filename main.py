@@ -4,7 +4,6 @@ from PIL import Image, ImageTk
 from openpyxl import Workbook, load_workbook
 import os
 
-
 class StudentManager:
     def __init__(self, filename='mezunlar.xlsx'):
         self.filename = filename
@@ -16,8 +15,7 @@ class StudentManager:
         except FileNotFoundError:
             workbook = Workbook()
             sheet = workbook.active
-            sheet.append(["İsim", "Üniversite", "Mezun Olma Yılı", "Bölüm", "Telefon", "Mail", "Adres", "Çalıştığı "
-                                                                                                        "Kurum"])
+            sheet.append(["İsim", "Üniversite", "Mezun Olma Yılı", "Bölüm", "Telefon", "Mail", "Adres", "Çalıştığı Kurum"])
             workbook.save(self.filename)
         return workbook
 
@@ -116,28 +114,57 @@ class StudentManagementGUI:
         label_right = tk.Label(self.root, image=self.img_right)
         label_right.pack(side="right", anchor="s")
 
-        self.baslik = tk.Label(self.root, text="Adnan Menderes Anadolu Lisesi Mezun Yönetim Sistemi", font=("Helvetica", 25), pady=20)
+        self.baslik = tk.Label(self.root, text="Adnan Menderes Anadolu Lisesi Mezun Yönetim Sistemi",
+                               font=("Helvetica", 25), pady=20)
         self.baslik.pack()
         self.label = tk.Label(self.root, text="Seçenekler:", font=("Helvetica", 16))
         self.label.pack()
 
-        button_height = 2
-        button_width = 20
+        button_height = 50
+        button_width = 200
 
-        self.add_button = tk.Button(self.root, text="Mezun Ekle", command=self.add_student, height=button_height, width=button_width, font=("Helvetica", 12))
-        self.add_button.pack()
+        # Load icons
+        icon_add = Image.open("singleplayer.png").resize((30, 30))
+        icon_search = Image.open("zoom.png").resize((30, 30))
+        icon_remove = Image.open("remove.png").resize((30, 30))
+        icon_filter = Image.open("export.png").resize((30, 30))
+        icon_exit = Image.open("exit.png").resize((30, 30))
 
-        self.search_button = tk.Button(self.root, text="Mezun Ara", command=self.search_student, height=button_height, width=button_width, font=("Helvetica", 12))
-        self.search_button.pack()
+        self.icon_add = ImageTk.PhotoImage(icon_add)
+        self.icon_search = ImageTk.PhotoImage(icon_search)
+        self.icon_remove = ImageTk.PhotoImage(icon_remove)
+        self.icon_filter = ImageTk.PhotoImage(icon_filter)
+        self.icon_exit = ImageTk.PhotoImage(icon_exit)
 
-        self.remove_button = tk.Button(self.root, text="Mezun Sil", command=self.remove_student, height=button_height, width=button_width, font=("Helvetica", 12))
-        self.remove_button.pack()
+        # Add Mezun Ekle button
+        self.add_button = tk.Button(self.root, text="Mezun Ekle", command=self.add_student, font=("Helvetica", 12),
+                                    height=button_height, width=button_width)
+        self.add_button.config(image=self.icon_add, compound=tk.LEFT)
+        self.add_button.pack(anchor="center")
 
-        self.filter_button = tk.Button(self.root, text="Filtrele ve Dosya Oluştur", command=self.filter_by_year, height=button_height, width=button_width, font=("Helvetica", 12))
-        self.filter_button.pack()
+        # Add Mezun Ara button
+        self.search_button = tk.Button(self.root, text="Mezun Ara", command=self.search_student, font=("Helvetica", 12),
+                                       height=button_height, width=button_width)
+        self.search_button.config(image=self.icon_search, compound=tk.LEFT)
+        self.search_button.pack(anchor="center")
 
-        self.exit_button = tk.Button(self.root, text="Çıkış", command=self.root.destroy, height=button_height, width=button_width, font=("Helvetica", 12))
-        self.exit_button.pack()
+        # Add Mezun Sil button
+        self.remove_button = tk.Button(self.root, text="Mezun Sil", command=self.remove_student, font=("Helvetica", 12),
+                                       height=button_height, width=button_width)
+        self.remove_button.config(image=self.icon_remove, compound=tk.LEFT)
+        self.remove_button.pack(anchor="center")
+
+        # Add Filtrele ve Dosya Oluştur button
+        self.filter_button = tk.Button(self.root, text="Filtrele ve Dosya Oluştur", command=self.filter_by_year,
+                                       font=("Helvetica", 12), height=button_height, width=button_width)
+        self.filter_button.config(image=self.icon_filter, compound=tk.LEFT)
+        self.filter_button.pack(anchor="center")
+
+        # Add Çıkış button
+        self.exit_button = tk.Button(self.root, text="Çıkış", command=self.root.destroy, font=("Helvetica", 12),
+                                     height=button_height, width=button_width)
+        self.exit_button.config(image=self.icon_exit, compound=tk.LEFT)
+        self.exit_button.pack(anchor="center")
 
     def add_student(self):
         self.clear_frame()
