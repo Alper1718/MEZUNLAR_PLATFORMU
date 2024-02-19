@@ -3,6 +3,29 @@ from tkinter import messagebox
 from PIL import Image, ImageTk
 from openpyxl import Workbook, load_workbook
 import os
+import hashlib
+import time
+
+
+def check_license():
+    """Check if the hash of the image matches the expected hash."""
+    expected_hash = "8464b97a81e4e221f9b99c5639488e7e"  # Replace this with the expected hash value
+    relative_path = "mezun programı/alişahin/licence.png"  # Replace this with the relative path to your license image
+    script_dir = os.path.dirname(os.path.realpath(__file__))
+    image_path = os.path.join(script_dir, relative_path)
+
+    if os.path.exists(image_path):
+        image_hash = StudentManager.calculate_hash(image_path)
+        if image_hash == expected_hash:
+            print("Erişim izni verildi.")
+            return True
+        else:
+            print("Lisans geçerli değil.")
+            return False
+    else:
+        print("Lisans bulunamadı.")
+        return False
+
 
 class StudentManager:
     def __init__(self, filename='mezunlar.xlsx'):
@@ -19,21 +42,29 @@ class StudentManager:
             workbook.save(self.filename)
         return workbook
 
+    @staticmethod
+    def calculate_hash(file_path):
+        """Calculate the hash of an image file."""
+        with open(file_path, 'rb') as f:
+            image_data = f.read()
+            return hashlib.md5(image_data).hexdigest()
+
     def add_student(self, name, university, year, faculty, phone, email, address, workplace):
         sheet = self.workbook.active
         sheet.append([name, university, year, faculty, phone, email, address, workplace])
         self.workbook.save(self.filename)
 
     def search_student(self, search_name):
-        sheet = self.workbook.active
         found = False
         result = ""
 
-        for row in sheet.iter_rows(min_row=2, values_only=True):
-            if row[0] == search_name:
-                result += f"İsim: {row[0]}, Kazandığı Üniversite: {row[1]}, Mezun Olma Yılı: {row[2]}, Kazandığı Bölüm: {row[3]}, "
-                result += f"Telefon: {row[4]}, Mail: {row[5]}, Adres: {row[6]}, Çalıştığı Kurum: {row[7]}\n"
-                found = True
+        for sheet_name in self.workbook.sheetnames:
+            sheet = self.workbook[sheet_name]
+            for row in sheet.iter_rows(min_row=2, values_only=True):
+                if row[0] == search_name:
+                    result += f"İsim: {row[0]}, Kazandığı Üniversite: {row[1]}, Mezun Olma Yılı: {row[2]}, Kazandığı Bölüm: {row[3]}, "
+                    result += f"Telefon: {row[4]}, Mail: {row[5]}, Adres: {row[6]}, Çalıştığı Kurum: {row[7]}\n"
+                    found = True
 
         if not found:
             result = "Öğrenci bulunamadı."
@@ -69,7 +100,7 @@ class StudentManager:
         filtered_students = []
 
         for row in sheet.iter_rows(min_row=2, values_only=True):
-            if row[2] == filter_year:  # Assuming year is at index 2
+            if row[2] == filter_year:
                 filtered_students.append(row)
 
         return filtered_students
@@ -537,8 +568,12 @@ class StudentManagementGUI:
 
 
 def main():
-    root = tk.Tk()
+    # Check the license first
+    if not check_license():
+        time.sleep(5000)
+        return  # Terminate the program if the license is not valid
 
+    root = tk.Tk()
     script_dir = os.path.dirname(os.path.abspath(__file__))
     image_left_path = os.path.join(script_dir, "hawks.png")
     image_right_path = os.path.join(script_dir, "amal.png")
@@ -546,7 +581,6 @@ def main():
     student_manager = StudentManager()
     app = StudentManagementGUI(root, student_manager, image_left_path, image_right_path)
     root.mainloop()
-
 
 if __name__ == "__main__":
     main()
