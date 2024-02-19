@@ -10,7 +10,7 @@ import time
 def check_license():
     """Check if the hash of the image matches the expected hash."""
     expected_hash = "8464b97a81e4e221f9b99c5639488e7e"  # Replace this with the expected hash value
-    relative_path = "mezun programı/alişahin/licence.png"  # Replace this with the relative path to your license image
+    relative_path = "C:/licence.png"  # Replace this with the relative path to your license image
     script_dir = os.path.dirname(os.path.realpath(__file__))
     image_path = os.path.join(script_dir, relative_path)
 
